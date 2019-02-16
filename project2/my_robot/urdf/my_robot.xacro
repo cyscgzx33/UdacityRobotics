@@ -1,14 +1,45 @@
 <?xml version='1.0'?>
 
 <robot name="my_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+  <xacro:include filename="$(find my_robot)/urdf/my_robot.gazebo" />
+
+  <gazebo reference="left_wheel">
+    <material>Gazebo/Green</material>
+  </gazebo>
+
+  <gazebo reference="right_wheel">
+    <material>Gazebo/Green</material>
+  </gazebo>
+
+  <gazebo reference="camera">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <gazebo reference="chassis">
+    <material>Gazebo/Blue</material>
+  </gazebo>
 
   <link name="robot_footprint"></link>
-  
   
   <joint name="robot_footprint_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <parent link="robot_footprint"/>
     <child link="chassis" />
+  </joint>
+
+  <joint name="camera_joint" type="fixed">
+    <origin xyz="0.2 0 0" rpy="0 0 0" />
+    <parent link="chassis"/>
+    <child link="camera" />  
+    <axis xyz="0 1 0"/> 
+  </joint>
+
+  <joint name="hokuyo_joint" type="fixed">
+    <origin xyz="0.15 0 0.1" rpy="0 0 0" />
+    <parent link="chassis"/>
+    <child link="hokuyo" />  
+    <axis xyz="0 1 0"/> 
   </joint>
 
   <joint type="continuous" name="left_wheel_hinge">
@@ -28,7 +59,60 @@
     <limit effort="10000" velocity="1000" />
     <dynamics damping="1.0" friction="1.0" />
   </joint>
+  
+  <link name="camera">
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="1e-6" ixy="0.0" ixz="0.0"
+        iyy="1e-6" iyz="0.0"
+        izz="1e-6"
+      />
+    </inertial>
 
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.05"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.05"/>
+      </geometry>
+    </visual>
+
+  </link>
+
+  <link name="hokuyo">
+    <inertial>
+      <mass value="1e-5"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+        ixx="1e-6" ixy="0.0" ixz="0.0"
+        iyy="1e-6" iyz="0.0"
+        izz="1e-6"
+      />
+    </inertial>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot/meshes/hokuyo.dae"/>
+      </geometry>
+    </visual>
+
+  </link>
 
   <link name="left_wheel">
     <inertial>
