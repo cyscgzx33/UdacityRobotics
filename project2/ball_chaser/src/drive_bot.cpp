@@ -1,19 +1,36 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include "ball_chaser/DriveToTarget.h"
-// TODO: check if the DriveToTarget header is included correctly or not 
+
 
 /* A global ros::Publisher to publish motor commands */
-ros::Publisher motor_command_publisher;
+ros::Publisher motor_cmd_pub;
 
-// TODO:
+
 /* Callback function */
 // Objectives:
 // 1) To publish requested linear_x and angular_z
 // 2) To feedback the message after publishing the requested velocities
-void drive_request_callback()
+bool drive_request_callback(ball_chaser::DriveToTarget::Request& req,
+                            ball_chaser::DriveToTarget::Response& res)
 {
+  ROS_INFO("DriveToTargetRequest received - linear_x: %1.2f, angular_z: %1.2f", (float)req.linear_x, (float)req.angular_z);
+
+  // Publish command velocity to "/cmd_vel"
+  geometry_msgs::Twist cmd_vel_;
+
+  cmd_vel_.linear.x = req.linear_x; // both of them are float64
+  cmd_vel_.angular.z = req.angular_z; // both of them are float64
   
+  motor_cmd_pub.publish(cmd_vel_);
+
+  // Return a response message
+  res.msg_feedback = "Velocity cmd sent: linear_x = " + std::to_string(cmd_vel_.linear.x) + ", angular_z = " + std::to_string(cmd_vel_.angular.z);
+
+  ROS_INFO_STREAM(res.msg_feedback);
+  
+
+  return true;
 
 }
 
@@ -30,17 +47,14 @@ int main(int argc, char** argv)
   // on the robot actuation topic, with a publish queue size 10
   motor_cmd_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
 
-  // TODO: Define a drive /ball_chaser/command_robot service with the callback function
+  // Define a drive /ball_chaser/command_robot service with the callback function
+  ros::ServiceServer service = nh.advertiseService("/ball_chaser/command_robot", drive_request_callback);
+  ROS_INFO("Ready to send command velocities");
 
-  // TODO: Delete the loop, move the code to the inside of the callback function 
-  //       and make changes to publish the requested velocities instead of constant values 
-  while(ros::ok()) 
-  {
-    // here it publishs constant velocities 
-  }
 
-  // TODO: Handle ROS communication events
-  // ros::spin();
+  // Handle ROS communication events
+  ros::spin();
+
 
   return 0;
 
