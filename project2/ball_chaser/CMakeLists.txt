@@ -133,6 +133,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(bot_driver src/drive_bot.cpp)
+add_executable(img_processor src/process_image.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -144,8 +145,14 @@ add_executable(bot_driver src/drive_bot.cpp)
 ## same as for the library above
 add_dependencies(bot_driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
+add_dependencies(img_processor ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 ## Specify libraries to link a library or executable target against
 target_link_libraries(bot_driver
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(img_processor
   ${catkin_LIBRARIES}
 )
 

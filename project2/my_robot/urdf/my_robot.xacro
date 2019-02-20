@@ -5,11 +5,11 @@
   <xacro:include filename="$(find my_robot)/urdf/my_robot.gazebo" />
 
   <gazebo reference="left_wheel">
-    <material>Gazebo/Green</material>
+    <material>Gazebo/Blue</material>
   </gazebo>
 
   <gazebo reference="right_wheel">
-    <material>Gazebo/Green</material>
+    <material>Gazebo/Blue</material>
   </gazebo>
 
   <gazebo reference="camera">
@@ -17,7 +17,7 @@
   </gazebo>
 
   <gazebo reference="chassis">
-    <material>Gazebo/Blue</material>
+    <material>Gazebo/Yellow</material>
   </gazebo>
 
   <link name="robot_footprint"></link>
@@ -43,7 +43,7 @@
   </joint>
 
   <joint type="continuous" name="left_wheel_hinge">
-    <origin xyz="0 0.15 0" rpy="0 0 0" />
+    <origin xyz="0 0.23 0" rpy="0 0 0" />
     <parent link="chassis"/>
     <child link="left_wheel" />
     <axis xyz="0 1 0" rpy="0 0 0" />
@@ -52,7 +52,7 @@
   </joint>
 
   <joint type="continuous" name="right_wheel_hinge">
-    <origin xyz="0 -0.15 0" rpy="0 0 0" />
+    <origin xyz="0 -0.23 0" rpy="0 0 0" />
     <parent link="chassis"/>
     <child link="right_wheel" />
     <axis xyz="0 1 0" rpy="0 0 0" />
@@ -128,14 +128,14 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
       <geometry>
-        <cylinder radius="0.1" length="0.05"/>
+        <cylinder radius="0.1" length="0.2"/>
       </geometry>
     </collision>
 
     <visual>
       <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
       <geometry>
-        <cylinder radius="0.1" length="0.05"/>
+        <cylinder radius="0.1" length="0.2"/>
       </geometry>
     </visual>
 
@@ -155,14 +155,14 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
       <geometry>
-        <cylinder radius="0.1" length="0.05"/>
+        <cylinder radius="0.1" length="0.2"/>
       </geometry>
     </collision>
 
     <visual>
       <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
       <geometry>
-        <cylinder radius="0.1" length="0.05"/>
+        <cylinder radius="0.1" length="0.2"/>
       </geometry>
     </visual>
 
