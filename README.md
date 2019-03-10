@@ -13,3 +13,6 @@ An demonstrating package from Udacity course materials, programmed some features
 
 ## kalman_filter
 Implemented some scripts about 1d and multidimentional kalman filter, for my personal reference in the future.
+
+## particle_filter
+Implemented some scripts about 2d particle filtes, each of them are within specific assumptions, and quite large part of each item has overlap parts.
