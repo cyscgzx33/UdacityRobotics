@@ -1,0 +1,34 @@
+<launch>
+  <!-- Map Server Node -->
+  <arg name="map_file" default="$(find localization_proj)/maps/project_3.yaml"/>
+  <node pkg="map_server" type="map_server" name="map_server" args="$(arg map_file)" />
+
+
+  <!-- AMCL Node -->
+  <node pkg="amcl" type="amcl" name="amcl" output="screen" >
+    <remap from="scan" to="localization_proj/laser/scan" />
+    <param name="odom_frame_id" value="odom" />
+    <param name="odom_model_type" value="diff-corrected" />
+    <param name="base_frame_id" value="robot_footprint" />
+    <param name="global_frame_id" value="map" />
+
+    <!-- Initial Position (might be inappropriate, keep an eye) -->
+    <param name="initial_pose_x" value="0" />
+    <param name="initial_pose_y" value="0" />
+  </node>
+  
+  <!-- Move Base Node -->
+  <node pkg="move_base" type="move_base" name="move_base" respawn="false" output="screen">
+    <remap from="scan" to="localization_proj/laser/scan" />
+    <param name="base_global_planner" value="navfn/NavfnROS" />
+    <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
+    
+    <!-- Load parameters through ymal file -->
+    <rosparam file="$(find localization_proj)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find localization_proj)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find localization_proj)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find localization_proj)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find localization_proj)/config/base_local_planner_params.yaml" command="load" />
+  </node>
+
+</launch>
