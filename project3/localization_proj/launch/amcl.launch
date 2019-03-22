@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <launch>
   <!-- Map Server Node -->
   <arg name="map_file" default="$(find localization_proj)/maps/project_3.yaml"/>
@@ -15,6 +17,33 @@
     <!-- Initial Position (might be inappropriate, keep an eye) -->
     <param name="initial_pose_x" value="0" />
     <param name="initial_pose_y" value="0" />
+    <param name="initial_pose_a" value="-1.57" /> <!-- initial yaw, defualt is 0 -->
+
+    <!-- default is 100 -->
+    <param name="min_particles" value="200" /> 
+    <!-- default is 5000 -->
+    <param name="max_particles" value="2000" />
+    <!-- translational movement filter, defualt is 0.2 --> 
+    <param name="update_min_d" value="0.05" /> 
+    <!-- rotational movement filter, defualt is pi/6 -->
+    <param name="update_min_a" value="0.13" /> 
+
+    <!-- defualt is -1.0 -->
+    <!-- <param name="laser_min_range" value="0.1" />      -->
+    <!-- default is -1.0 -->
+    <!-- <param name="laser_max_range" value="40" />  -->
+    <!-- defualt is 30 -->
+    <!-- <param name="laser_max_beams" value="64" />  -->
+
+    <!-- default is 0.2, odom's rotation estimate from rotation component of robot's motion -->
+    <param name="odom_alpha1" value="0.00001" /> 
+    <!-- default is 0.2, odom's rotation estimate from translation component of robot's motion --> 
+    <param name="odom_alpha2" value="0.001" />    
+    <!-- default is 0.2, odom's translation estimate from translation component of robot's motion --> 
+    <param name="odom_alpha3" value="0.00001" />    
+    <!-- default is 0.2, odom's translation estimate from rotation component of robot's motion -->
+    <param name="odom_alpha4" value="0.001" /> 
+
   </node>
   
   <!-- Move Base Node -->

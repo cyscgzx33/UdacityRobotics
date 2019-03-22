@@ -33,7 +33,7 @@
               -x $(arg x) -y $(arg y) -z $(arg z)
               -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
 
-  <!-- -->
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" />
+  <!-- Rviz Node-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find localization_proj)/launch/config_default.rviz" respawn="false" />
 
 </launch>
