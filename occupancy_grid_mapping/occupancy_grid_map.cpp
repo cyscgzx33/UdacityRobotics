@@ -1,7 +1,10 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
+#include "src/matplotlibcpp.h" //Graph Library
+
 using namespace std;
+namespace plt = matplotlibcpp;
 
 // Sensor characteristic: Min and Max ranges of the beams
 double Zmax = 5000, Zmin = 170;
@@ -90,6 +93,38 @@ void occupancyGridMapping(double Robotx, double Roboty, double Robottheta, doubl
     
 }
 
+
+void visualization()
+{
+    // Initialize a plot named Map of size 300x150
+    plt::title("Yusens Map");
+    // const int x_lower_limit = 0, x_upper_limit = 300;
+    plt::xlim(0, 300);
+    plt::ylim(0, 150);
+
+    //Loop over the log odds values of the cells and plot each cell state. 
+    //Unkown state: green color, occupied state: black color, and free state: red color 
+    
+    // Note 1: for plot, the loop must be iterated by the type "double"
+    // Note 2: here plot need to use "{ x }" and "{ y }"
+    for (double x = 0; x < mapWidth / gridWidth; x++) {
+        for (double y = 0; y < mapHeight / gridHeight; y++) {
+            if (l[x][y] >= locc) { // occupied: black
+                plt::plot( { x }, { y }, "k.");
+            } else if (l[x][y] <= lfree) { // free: red
+                plt::plot( { x }, { y }, "r.");
+            } else { // unknown: green
+                plt::plot( { x }, { y }, "g.");
+            }
+        }
+    }    
+   
+    
+    // Save the image and close the plot 
+    plt::save("./Images/yusen_map_test.png");
+    plt::clf();
+}
+
 int main()
 {
     double timeStamp;
@@ -115,5 +150,8 @@ int main()
         }
     }
     
+    // Plot the map
+    visualization();
+
     return 0;
 }
