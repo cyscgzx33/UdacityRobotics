@@ -27,7 +27,7 @@
   </gazebo>
 
   <!-- RGBD Camera (within project 4, replacing the camera code snippet from projets 1 to 3)-->
-  <gazebo reference="camera_link">
+  <gazebo reference="camera"> <!-- change "camera_link" to "camera" -->
     <sensor type="depth" name="camera1">
         <always_on>1</always_on>
         <update_rate>20.0</update_rate>
