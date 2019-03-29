@@ -1,0 +1,7 @@
+.settings
+bin
+build
+lib
+*.swp
+*.swo
+*.pyc
