@@ -10,8 +10,8 @@ using namespace std;
 */
 class Map {
 public:
-  const static int height = 5;
-  const static int width = 6;
+  const static int mapHeight = 5;
+  const static int mapWidth = 6;
   vector<vector<int>> grid = {
     {0, 1, 0, 0, 0, 0},
     {0, 1, 0, 0, 0, 0},
@@ -25,13 +25,13 @@ public:
    Inside the Planner class, define the start, goal, cost, movements, and movements_arrows
    Note: The goal should be defined it terms of the mapWidth and mapHeight
 */
-class Planner {
+class Planner : Map {
 public:
   vector<int> start = {0, 0};
-  vector<int> goal = {4, 5};
+  vector<int> goal = { mapHeight - 1, mapWidth - 1 };
   vector<vector<int>> movements = { {-1, 0}, {0, -1}, {1, 0}, {0, 1} };
   vector<char> movements_arrows = {'^', '<', 'v', '>'};
-  double cost = 1;
+  double cost = 1.0;
 };
 
 /* Define a print2DVector function which will print 2D vectors of any data type
@@ -50,7 +50,7 @@ public:
    c d
    Hint: You need to use templates
 */
-template <class T>
+template <class T> // template <typename T> also works
 void print2DVector(vector<vector<T>> input)
 {
   for (auto row : input)
