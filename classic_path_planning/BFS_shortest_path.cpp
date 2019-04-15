@@ -55,47 +55,46 @@ void print2DVector(T Vec)
 // You are only required to print the final triplet values
 
 
-// // Keep an eye on this compare function
-// struct myCompare {
-//     bool operator()(vector<int> const & a, vector<int> const & b)
-//     { 
-//       int aCount = 0, bCount = 0;
-//       if (a[0] > b[0]) aCount += 2;
-//       else if (a[0] < b[0]) bCount += 2;
-//       if (a[2] > b[2]) aCount += 1;
-//       else bCount += 1;
-
-//       return aCount > bCount;
-//       /*return a[0] > b[0];*/ //seems not working
-//     }
-// };
-
-
 // Keep an eye on this compare function
+
+
+// Method 1: seems working
 struct myCompare {
     bool operator()(vector<int> const & a, vector<int> const & b)
     { 
-
-
       /* Priority I: cost of each cell, most important */
       if (a[0] > b[0]) return true;
       else if (a[0] < b[0]) return false;
       else 
       {
-        /* Priority II: cost of steps, least important */
-        if (a[2] > b[2]) return true;
-        // else if (a[2] < b[2]) return false;
-        else return false;
-        // {
-        //   /* Priority III: cost of distance, intermediatly important*/
-        //   if (a[4] > b[4]) return true;
-        //   else return false; // no priority IV, so stop here
-        // }
-        
+        /* Priority II: cost of distance, intermediatly important */
+        if (a[4] > b[4]) return true;
+        else if (a[4] < b[4])return false; // no priority IV, so stop here
+        else
+        {
+          /* Priority III: cost of steps, least important */
+          if (a[2] > b[2]) return true;
+          else return false;
+        }
       }
-      
     }
 };
+
+// Method 1: seems working, as well
+// struct myCompare {
+//   bool operator() (vector<int> const& a, vector<int> const& b)
+//   {
+//     int g_a = 0, g_b = 0;
+//     int h_a = 0, h_b = 0;
+
+//     g_a = a[0] * 1000;
+//     g_b = b[0] * 1000;
+//     h_a = a[4] * 10;
+//     h_b = b[4] * 10;
+
+//     return g_a + h_a > g_b + h_b;
+//   }
+// };
 
 
 
@@ -104,40 +103,52 @@ void search(Map map, Planner planner)
     priority_queue<vector<int>, vector<vector<int>>, myCompare> q;
     vector<vector<int>> expansion(map.mapHeight, vector<int>(map.mapWidth, -1));
     vector<vector<bool>> isVisited(map.mapHeight, vector<bool>(map.mapWidth, false));
+    vector<vector<char>> direction(map.mapHeight, vector<char>(map.mapWidth, '-'));
 
     int steps = 0;
 
     int startRow = planner.start[0];
     int startCol = planner.start[1];
+    int goalRow  = planner.goal[0];
+    int goalCol  = planner.goal[1];
 
     int startPos = startRow * map.mapWidth + startCol;
     int startCost = map.grid[startRow][startCol];
-    q.push({startCost, startPos, steps});
 
-    
+    // modified to implement nextDir
+    int startDir = -1; // -1 means unsure yet
+
+    // modified to implement startDist
+    int startDist = ( goalRow - startRow ) + ( goalCol - startCol );
+
+    // added two additional elements: startDir & startDist
+    q.push({startCost, startPos, steps, startDir, startDist});
+
 
     while(!q.empty())
     {
-
       int curRow = q.top()[1] / map.mapWidth;
       int curCol = q.top()[1] % map.mapWidth;
       q.pop();
 
       // print out to check
-      /*cout << "row = "     << curRow     << ", " 
+      cout << "row = "     << curRow     << ", " 
            << "col = "     << curCol     << ", " 
            << "nextPos = " << q.top()[1] << ", " 
-           << "steps = "   << q.top()[2] << endl;*/
+           << "steps = "   << q.top()[2] << endl;
       
       isVisited[curRow][curCol] = true;
       expansion[curRow][curCol] = steps;
 
-      if (curRow == planner.goal[0] && curCol == planner.goal[1]) break;
-
-      for (auto ele : planner.movements)
+      if (curRow == planner.goal[0] && curCol == planner.goal[1]) 
       {
-          int nextRow = curRow + ele[0];
-          int nextCol = curCol + ele[1];
+        direction[curRow][curCol] = '*';
+        break;
+      }
+      for (int i = 0; i < planner.movements.size(); i++)
+      {
+          int nextRow = curRow + planner.movements[i][0];
+          int nextCol = curCol + planner.movements[i][1];
           
           if (nextRow >= 0 && nextRow < map.mapHeight && nextCol >= 0 && nextCol < map.mapWidth && !isVisited[nextRow][nextCol])
           {
@@ -145,15 +156,20 @@ void search(Map map, Planner planner)
             isVisited[nextRow][nextCol] = true;
             int nextPos = nextRow * map.mapWidth + nextCol;
             int nextCost = map.grid[nextRow][nextCol];
-            q.push({nextCost, nextPos, steps});
+            int nextDist = ( goalRow - nextRow ) + ( goalCol - nextCol );
+            q.push({nextCost, nextPos, steps, i, nextDist}); // modified to implement nextDir
           }
       }
+
+      // added a part to decide what is direction of the next step
+      char nextDir = planner.movements_arrows[q.top()[3]][0]; // Trick: convert from string to a single char
+      direction[curRow][curCol] = nextDir;
 
       steps++;
       
     }
 
-    print2DVector(expansion);
+    print2DVector(direction);
 }
 
 int main()
