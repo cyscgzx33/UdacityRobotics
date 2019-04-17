@@ -2,10 +2,12 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
+
 
 using namespace std;
 
-// Map class
+// TODO: Add a Manhattan-based heuristic vector to the Map class
 class Map {
 public:
     const static int mapWidth = 6;
@@ -48,7 +50,7 @@ void print2DVector(T Vec)
     }
 }
 
-// Search function will generate the expansions
+/* #### Modify the search function and implement the A* algorithm #### */
 void search(Map map, Planner planner)
 {
     // Create a closed 2 array filled with 0s and first element 1
@@ -65,10 +67,13 @@ void search(Map map, Planner planner)
     int x = planner.start[0];
     int y = planner.start[1];
     int g = 0;
+    int h = abs(planner.goal[0] - x) + abs(planner.goal[1] - y); // manhattan huristic cost
+    int f = h + g;
+
 
     // Store the expansions
     vector<vector<int> > open;
-    open.push_back({ g, x, y });
+    open.push_back({ f, g, x, y });
 
     // Flags and counters
     bool found = false;
@@ -95,9 +100,10 @@ void search(Map map, Planner planner)
             next = open.back();
             open.pop_back();
 
-            x = next[1];
-            y = next[2];
-            g = next[0];
+            x = next[2];
+            y = next[3];
+            g = next[1];
+            f = next[0];
 
             // Fill the expand vectors with count
             expand[x][y] = count;
@@ -117,7 +123,8 @@ void search(Map map, Planner planner)
                     if (x2 >= 0 && x2 < map.grid.size() && y2 >= 0 && y2 < map.grid[0].size()) {
                         if (closed[x2][y2] == 0 and map.grid[x2][y2] == 0) {
                             int g2 = g + planner.cost;
-                            open.push_back({ g2, x2, y2 });
+                            int f2 = abs(planner.goal[0] - x2) + abs(planner.goal[1] - y2) + g2;
+                            open.push_back({ f2, g2, x2, y2 });
                             closed[x2][y2] = 1;
                             action[x2][y2] = i;
                         }
@@ -127,7 +134,7 @@ void search(Map map, Planner planner)
         }
     }
     // Print the expansion List
-    // print2DVector(expand);
+    //print2DVector(expand);
 
     // Find the path with robot orientation
     vector<vector<string> > policy(map.mapHeight, vector<string>(map.mapWidth, "-"));
@@ -160,4 +167,3 @@ int main()
 
     return 0;
 }
-
