@@ -134,7 +134,7 @@ void search(Map map, Planner planner)
         }
     }
     // Print the expansion List
-    //print2DVector(expand);
+    print2DVector(expand);
 
     // Find the path with robot orientation
     vector<vector<string> > policy(map.mapHeight, vector<string>(map.mapWidth, "-"));

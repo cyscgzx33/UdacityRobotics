@@ -91,7 +91,7 @@ struct myCompare {
         //   if (a[4] > b[4]) return true;
         //   else return false; // no priority IV, so stop here
         // }
-        
+        <
       }
       
     }
