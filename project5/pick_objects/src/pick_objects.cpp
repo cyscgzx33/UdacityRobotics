@@ -68,6 +68,7 @@ int main(int argc, char** argv)
     
     // Trial method two
     ros::Duration(5.0).sleep();
+    ROS_INFO("Waited for 5 seconds, and end of the whole process.");
 
     return 0;
 
