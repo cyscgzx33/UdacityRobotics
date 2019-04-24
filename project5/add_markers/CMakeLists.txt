@@ -10,6 +10,7 @@ project(add_markers)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   visualization_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -133,6 +134,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(add_markers src/add_markers.cpp)
+add_executable(add_markers_odom src/add_markers_odom.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -143,12 +145,15 @@ add_executable(add_markers src/add_markers.cpp)
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(add_markers ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(add_markers_odom ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(add_markers
   ${catkin_LIBRARIES}
 )
-
+target_link_libraries(add_markers_odom
+  ${catkin_LIBRARIES}
+)
 #############
 ## Install ##
 #############
