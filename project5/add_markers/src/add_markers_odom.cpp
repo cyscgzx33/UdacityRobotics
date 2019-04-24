@@ -2,18 +2,7 @@
 #include <visualization_msgs/Marker.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
-
-
-/* TODO: using other method to realize it instead of HARD CODE */
-#define pick_up_pos_x 1.0
-#define pick_up_orit_w 1.0
-#define pick_up_pos_x_thres 0.15
-#define pick_up_orit_w_thres 0.10
-
-#define drop_off_pos_x 3.0
-#define drop_off_orit_w 1.5
-#define drop_off_thres 0.15
-#define drop_off_orit_w_thres 0.10
+#include "add_markers/addMarkers.h"
 
 /* This callback function continuously executes and reads the goals data */
 void odom_callback(const geometry_msgs::PoseWithCovarianceStamped amcl_pose_msg, geometry_msgs::Pose& odom_pose)

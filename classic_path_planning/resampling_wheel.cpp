@@ -7,7 +7,7 @@ double frand()
 	std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> dist6(1,100); // distribution in range [1, 6]
-	double result = dist6(rng) / 100.0;
+	double result = dist6(rng) / 100.0; // note: must use 100.0 instead of 100
 	return result;
 }
 
