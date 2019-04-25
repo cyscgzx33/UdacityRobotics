@@ -25,8 +25,8 @@ int main(int argc, char** argv)
     goal.target_pose.header.stamp = ros::Time::now();
 
     // Define a position and orientation for the robot to reach
-    goal.target_pose.pose.position.x = 1.0;
-    goal.target_pose.pose.orientation.w = 1.0;
+    goal.target_pose.pose.position.x = 3.0;
+    goal.target_pose.pose.orientation.w = 1.5;
 
     // Send the goal position and orientation for the robot to reach
     ROS_INFO("Sending goals for the robot to reach");
@@ -42,8 +42,22 @@ int main(int argc, char** argv)
         ROS_INFO("ERROR: The base failed to move forward 1 meter");
     }
 
+    // Wait for 5 secs after reaching the pick up zone
+
+    // Trial method one: not working
+    // -------------------------------------------------------------------------
+    // while(!ac.waitForServer(ros::Duration(5.0))){
+    //     ROS_INFO("Waiting for 5 secs after reaching the pick up zone");
+    // }
+    // -------------------------------------------------------------------------
+    
+    // Trial method two
+    ros::Duration(5.0).sleep();
+    ROS_INFO("Waited for 5 seconds, and end of the whole process.");
+
+
     // Add second goal for the robot to reach
-    goal.target_pose.pose.position.x = 3.0;
+    goal.target_pose.pose.position.x = 4.5;
     goal.target_pose.pose.orientation.w = 1.5;
    
     ROS_INFO("Sending the second goal for the robot to reach");
@@ -57,18 +71,7 @@ int main(int argc, char** argv)
         ROS_INFO("ERROR: The base failed to move forward 3 meter");
     }
 
-    // Wait for 5 secs after reaching the pick up zone
-
-    // Trial method one: not working
-    // -------------------------------------------------------------------------
-    // while(!ac.waitForServer(ros::Duration(5.0))){
-    //     ROS_INFO("Waiting for 5 secs after reaching the pick up zone");
-    // }
-    // -------------------------------------------------------------------------
     
-    // Trial method two
-    ros::Duration(5.0).sleep();
-    ROS_INFO("Waited for 5 seconds, and end of the whole process.");
 
     return 0;
 
