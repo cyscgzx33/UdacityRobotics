@@ -61,17 +61,17 @@ void addMarkers::odom_callback(const geometry_msgs::PoseWithCovarianceStamped& a
     odom_pose_ = amcl_pose_msg.pose.pose;
 }
 
-void addMarkers::update_odom_status(double cur_pos_x, double cur_orit_w)
+void addMarkers::update_odom_status(double cur_pos_x, double cur_pos_y, double cur_orit_w)
 {
     if (isPickup_ && isDropoff_) return;
 
-    if (!isPickup_ && abs(cur_pos_x - pick_up_pos_x) < pick_up_pos_x_thres && abs(cur_orit_w - pick_up_orit_w) < pick_up_orit_w_thres) 
+    if (!isPickup_ && abs(cur_pos_x - pick_up_pos_x) < pick_up_pos_thres && abs(cur_pos_y - pick_up_pos_y) < pick_up_pos_thres && abs(cur_orit_w - pick_up_orit_w) < pick_up_orit_w_thres) 
     {
         isPickup_ = true;
         return;
     }
 
-    if (isPickup_ && !isDropoff_ && abs(cur_pos_x - drop_off_pos_x) < drop_off_thres && abs(cur_orit_w - drop_off_orit_w) < drop_off_orit_w_thres)
+    if (isPickup_ && !isDropoff_ && abs(cur_pos_y - drop_off_pos_y) < drop_off_pos_thres && abs(cur_pos_x - drop_off_pos_x) < drop_off_pos_thres && abs(cur_orit_w - drop_off_orit_w) < drop_off_orit_w_thres)
     {
         isDropoff_ = true;
     }
@@ -79,22 +79,26 @@ void addMarkers::update_odom_status(double cur_pos_x, double cur_orit_w)
 
 void addMarkers::check_odom_status()
 {
-    update_odom_status(odom_pose_.position.x, odom_pose_.orientation.w);
+    update_odom_status(odom_pose_.position.x, odom_pose_.position.y, odom_pose_.orientation.w);
 
     if (!isPickup_)
     {
         marker_.pose.position.x = pick_up_pos_x; // based on the value in pick_objects
+        marker_.pose.position.y = pick_up_pos_y; // based on the value in pick_objects
         marker_.pose.orientation.w =pick_up_orit_w; // based on the value in pick_objects
         
         check_publish_markers_status();
         marker_pub_.publish(marker_);
-        ROS_INFO("Published the marker at the pickup position!");
+        ROS_INFO("Published the marker at the pickup position.");
     }
     else // the robot has reached the pickup zone
     {
         if (!isPaused_) // the robot haven't paused for 5 secs yet
         {
             marker_.color.a = 0.0; // hide the marker
+            check_publish_markers_status();
+            marker_pub_.publish(marker_);
+            ROS_INFO("Hided the marker at the pickup position to simulate pickup.");
             ros::Duration(5.0).sleep();
             isPaused_ = true;
         } 
@@ -104,11 +108,12 @@ void addMarkers::check_odom_status()
             {   
                 marker_.color.a = 1.0; // unhide the marker
                 marker_.pose.position.x = drop_off_pos_x; // based on the value in pick_objects
+                marker_.pose.position.y = drop_off_pos_y; // based on the value in pick_objects
                 marker_.pose.orientation.w = drop_off_orit_w; // based on the value in pick_objects
                 
                 check_publish_markers_status();
                 marker_pub_.publish(marker_);
-                ROS_INFO("Published the marker at the dropoff position!");
+                ROS_INFO("Published the marker at the dropoff position.");
             }
             else // the robot has reached the drop off zone
             {

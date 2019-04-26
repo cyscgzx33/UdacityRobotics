@@ -25,7 +25,8 @@ int main(int argc, char** argv)
     goal.target_pose.header.stamp = ros::Time::now();
 
     // Define a position and orientation for the robot to reach
-    goal.target_pose.pose.position.x = 3.0;
+    goal.target_pose.pose.position.x = -2.0;
+    goal.target_pose.pose.position.y = 6.0;
     goal.target_pose.pose.orientation.w = 1.5;
 
     // Send the goal position and orientation for the robot to reach
@@ -58,6 +59,7 @@ int main(int argc, char** argv)
 
     // Add second goal for the robot to reach
     goal.target_pose.pose.position.x = 4.5;
+    goal.target_pose.pose.position.y = -0.5;
     goal.target_pose.pose.orientation.w = 1.5;
    
     ROS_INFO("Sending the second goal for the robot to reach");
