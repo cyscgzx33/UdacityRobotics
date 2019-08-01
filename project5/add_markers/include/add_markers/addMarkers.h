@@ -8,14 +8,16 @@
 
 
 /* TODO: using other method to realize it instead of HARD CODE */
-#define pick_up_pos_x 1.0
-#define pick_up_orit_w 1.0
-#define pick_up_pos_x_thres 0.15
+#define pick_up_pos_x -2.0
+#define pick_up_pos_y 6.0
+#define pick_up_orit_w 1.5
+#define pick_up_pos_thres 0.15
 #define pick_up_orit_w_thres 0.10
 
-#define drop_off_pos_x 3.0
+#define drop_off_pos_x 4.5
+#define drop_off_pos_y -0.5
 #define drop_off_orit_w 1.5
-#define drop_off_thres 0.15
+#define drop_off_pos_thres 0.15
 #define drop_off_orit_w_thres 0.10
 
 class addMarkers
@@ -23,8 +25,13 @@ class addMarkers
     private:
         /* ROS member variables */
         ros::NodeHandle nh_;
+<<<<<<< HEAD
         ros::Subscriber odom_sub_;
         ros::Publisher marker_pub_;
+=======
+        ros::Subscriber odom_sub_ = nh_.subscribe("/amcl_pose", 10, &addMarkers::odom_callback, this); // "/amcl_pose" is more accurate than "/odom"
+        ros::Publisher marker_pub_ = nh_.advertise<visualization_msgs::Marker>("visualization_marker", 1);
+>>>>>>> b21543b81586cf9c16c78addb6209f02296f7085
 
         /* Other member variables */
         bool isPickup_ = false;
@@ -40,10 +47,17 @@ class addMarkers
         addMarkers(ros::NodeHandle&);
         ~addMarkers();
 
+<<<<<<< HEAD
         void odom_callback(const geometry_msgs::PoseWithCovarianceStamped);
         void update_odom_status(double, double);
         void check_odom_status();
         void publish_markers();
+=======
+        void odom_callback(const geometry_msgs::PoseWithCovarianceStamped&);
+        void update_odom_status(double, double, double);
+        void check_publish_markers_status();
+        void check_odom_status();
+>>>>>>> b21543b81586cf9c16c78addb6209f02296f7085
 
 };
 
