@@ -25,14 +25,13 @@ class addMarkers
         ros::NodeHandle nh_;
         ros::Subscriber odom_sub_;
         ros::Publisher marker_pub_;
-        ros::Rate r_(20);
 
         /* Other member variables */
         bool isPickup_ = false;
         bool isDropoff_ = false;
         bool isPaused_ = false;
         
-        geometry_msgs::Pose, odom_pose_;
+        geometry_msgs::Pose odom_pose_;
 
         visualization_msgs::Marker marker_;
 
@@ -43,6 +42,7 @@ class addMarkers
 
         void odom_callback(const geometry_msgs::PoseWithCovarianceStamped);
         void update_odom_status(double, double);
+        void check_odom_status();
         void publish_markers();
 
 };
