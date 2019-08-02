@@ -136,6 +136,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(turtle_tf_broadcaster src/turtle_tf_broadcaster.cpp)
 add_executable(turtle_tf_listener src/turtle_tf_listener.cpp)
+add_executable(frame_tf_broadcaster src/frame_tf_broadcaster.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -153,6 +154,10 @@ target_link_libraries(turtle_tf_broadcaster
 )
 
 target_link_libraries(turtle_tf_listener
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(frame_tf_broadcaster
   ${catkin_LIBRARIES}
 )
 

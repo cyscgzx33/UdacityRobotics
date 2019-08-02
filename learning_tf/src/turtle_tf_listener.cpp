@@ -31,7 +31,24 @@ int main(int argc, char** argv) {
             // 1 & 2. we want the transform from frame /turtle1 to frame /turtle2
             // 3. the time at which we want to transform; here ros::Time(0) gets us the latest available transform.
             // 4. the object in which we store the resulting transform.
-            listener.lookupTransform("/turtle2", "/turtle1", ros::Time(0), transform);
+
+            /* **********************************************************************************************************
+             * within these steps, it can basically work with one small error:
+             * [ERROR] [1564756246.979394372]: "turtle2" passed to lookupTransform argument target_frame does not exist. 
+             * - Reason: 
+             *           This happens because our listener is trying to compute the transform before messages 
+             *           about turtle 2 have been received because it takes a little time to spawn in turtlesim 
+             *           and start broadcasting a tf frame.
+             * - Counter-measure: 
+             *           Add waitForTransform() before lookupTransform
+             * ********************************************************************************************************** */
+
+            // 5. (adds-on): waiting for transform for some duration and look up transform
+            listener.waitForTransform( "/turtle2", "turtle1", ros::Time(0), ros::Duration(10.0) );
+            // listener.lookupTransform("/turtle2", "/turtle1", ros::Time(0), transform);
+
+            // change the behavior of the listener
+            listener.lookupTransform("/turtle2", "/carrot1", ros::Time(0), transform);
         }
         catch (tf::TransformException& ex) {
             ROS_ERROR( "%s", ex.what() );
